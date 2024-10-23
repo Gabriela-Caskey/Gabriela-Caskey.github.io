@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buzón de Propuestas</title>
+    <script type="module">
+        // Importar las funciones necesarias desde el SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js";
+
+        // Configuración de tu aplicación web
+        const firebaseConfig = {
+            apiKey: "AIzaSyA6CxVCTaMQipafmLtYnokeiLd8Pf7MrV0",
+            authDomain: "propuestas-b9d04.firebaseapp.com",
+            projectId: "propuestas-b9d04",
+            storageBucket: "propuestas-b9d04.appspot.com",
+            messagingSenderId: "302303384721",
+            appId: "1:302303384721:web:2b58bfffadd481fbae9b30"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Función para enviar propuestas
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById('proposalForm');
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const proposalInput = document.getElementById('proposalInput').value;
+
+                try {
+                    await addDoc(collection(db, 'propuestas'), {
+                        propuesta: proposalInput,
+                        fecha: new Date(),
+                    });
+                    alert('Propuesta enviada con éxito!');
+                    document.getElementById('proposalInput').value = ''; // Limpiar el campo
+                } catch (error) {
+                    console.error("Error al enviar la propuesta: ", error);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>¡Bienvenido a tu Buzón de Propuestas!</h1>
+    <form id="proposalForm">
+        <input type="text" id="proposalInput" placeholder="Escribe tu propuesta" required>
+        <button type="submit">Enviar Propuesta</button>
+    </form>
+</body>
+</html>
